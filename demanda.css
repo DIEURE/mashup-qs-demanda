@@ -1,0 +1,263 @@
+.flex-container {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0 45px 45px 0;
+}
+
+
+.qvplaceholder,
+.qvobject {
+	flex: 1 1 auto;
+	margin: 20px;
+	height: 350px;
+	min-width: 90%;
+}
+
+#CurrentSelections_desktop>div {
+	background-color: white;
+}
+
+#CurrentSelections_desktop div,
+#CurrentSelections_desktop button {
+	border: none !important;
+}
+
+.filtros {
+	height: 800px;
+	background-color: #fff;
+	text-align: center;
+}
+
+.menu-hidde {
+	background: #333 none repeat scroll 0% 0%;
+	width: 185px;
+	display: none;
+	height: calc(100% - 58px);
+	position: absolute;
+	/*necessária para o funcionamento*/
+	box-shadow: 1px 2px 3px #DDD;
+	right: 0;
+	/*é com essa propriedade que o menu fica escondido a esquerda*/
+	transition: right .5s;
+	z-index: 9;
+	top: 58px;
+}
+
+/*
+.menu-hidde li {
+color: black;
+}
+*/
+
+@media screen and (max-width: 640px) {
+	.menu-hidde {
+		height: calc(100% - 98px);
+		top: 98px;
+	}
+}
+
+.previsao {
+	background-color: rgba(1, 37, 26, 0.1);
+	color: rgba(255, 255, 255, .8);
+	display: block;
+	padding: 0px 0px 0px 0px;
+	position: relative;
+	text-align: center;
+	text-decoration: none;
+	margin-bottom: 0px;
+	border: none;
+}
+
+.grafcard {
+	margin-top: 15px;
+	position: relative;
+	height: 300px;
+
+}
+
+div.qv-global-selections.ng-scope.ng-isolate-scope {
+	z-index: 9999;
+}
+
+
+.image_perfil {
+	background-color: white;
+}
+
+.titulo {
+	height: 35px;
+	font-size: 25px !important;
+	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+
+.titulo span {
+	font-size: 1rem !important;
+	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+	font-weight: 300;
+	color: #fff;
+
+}
+
+.kpi_1 {
+	height: 42px;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+	text-align: center;
+	font-size: large;
+}
+
+.kpi_1 span {
+	font-size: 2.2rem !important;
+	font-family: sans-serif !important;
+
+}
+
+.kpi_1_rotulo {
+	height: 24px;
+}
+
+.kpi_1_rotulo span {
+	font-size: 1rem !important;
+	font-family: sans-serif !important;
+
+}
+
+.container-icone {
+	display: flex;
+	/* Alinha o ícone e o texto lado a lado */
+	align-items: center;
+	/* Centraliza verticalmente */
+	gap: 10px;
+	/* Espaço entre o ícone e o texto */
+}
+
+.Graf_1 {
+
+	height: 380px;
+	width: 400px;
+	margin-left: 10px;
+
+}
+
+.Graf_2 {
+	height: 380px;
+	width: 800px;
+	margin-left: 5px;
+}
+
+.Graf_3 {
+	height: 368px;
+}
+
+
+#popup {
+	background-color: #c3534b;
+	color: #FFFFFF;
+	position: fixed;
+	max-width: 250px;
+	padding: 10px;
+	margin: 10px;
+	bottom: 0;
+	right: 0;
+	display: none;
+	border-radius: 5px;
+	z-index: 6;
+	font-family: sans-serif;
+}
+
+.close {
+	cursor: pointer;
+	background: 0 0;
+	border: 0;
+	float: right;
+	font-size: 21px;
+	font-weight: 700;
+	line-height: 1;
+	color: #000;
+	text-shadow: 0 1px 0 #fff;
+	opacity: .2;
+	position: absolute;
+	right: 9px;
+	top: 7px;
+}
+
+.close:hover {
+	opacity: .5;
+}
+
+#popupText {
+	margin-right: 23px;
+}
+
+.nav {
+	font-size: medium;
+	color-scheme: initial;
+	color: #c3534b;
+}
+
+.flex {
+	display: flex;
+	flex-wrap: wrap;
+	max-width: 800px;
+	max-height: 100%;
+	margin: 0 auto;
+}
+
+.flex>div {
+	flex: 1 1 400px;
+	margin: 10px;
+	width: 500;
+	margin-left: 10px;
+
+}
+
+.fundo_preto {
+	background-color: rgba(0, 0, 0, .2);
+}
+
+.fundo_cinza_graf {
+	background-color: #ff0000;
+}
+
+.titulo span {
+	font-size: 1rem !important;
+	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+	font-weight: 300;
+	color: #fff;
+
+}
+
+.expandir {
+	position: absolute;
+	right: 25px;
+	top: 0px;
+	z-index: 3;
+	cursor: pointer;
+	color: #333;
+}
+
+.expandir_ativo {
+	height: 100vh !important;
+	width: 100vw !important;
+	background-color: royalblue;
+	z-index: 5;
+	position: fixed !important;
+	top: 0;
+	right: 0;
+}
+.content-wrapper {
+    min-height: calc(100vh - 120px);
+}
+.main-footer {
+    position: relative;
+    z-index: 30;
+	padding-bottom: 50px;
+}
+
+@media (min-width: 768px) {
+  .carousel-inner .carousel-item.active,
+  .carousel-inner .carousel-item-next,
+  .carousel-inner .carousel-item-prev {
+    display: flex;
+  }
+}

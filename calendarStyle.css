@@ -1,0 +1,159 @@
+/* CSS */
+body {
+  margin: 2;
+  padding: 5;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif, Helvetica, sans-serif;
+  font-family: 12px;
+}
+
+.calendar-container {
+  width: 100%;
+  background: white;
+  padding: 30;
+
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  height: 45px;
+  background-color: #e7e7e7;
+  background: linear-gradient(15deg, #280050 0%, #024d79 100%);
+  color: rgb(255, 255, 255);
+  font-size: 10px;
+
+}
+
+.calendar-days-name {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: bold;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, Tahoma, Geneva, Verdana, sans-serif;
+  text-transform: uppercase;
+  background: #eee;
+  padding: 10px 10;
+
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  padding: 10px;
+
+}
+
+/* Estilo do dia */
+.day {
+  text-align: center;
+  border: 1px solid #d1cece;
+  min-height: 150px;
+  width: 200px;
+  padding: 16px;
+  border-radius: 5px;
+
+  font-size: 14px;
+
+
+
+}
+
+.day-number {
+  font-size: 25px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 45px;
+
+}
+
+
+/* Inserir dados (Eventos) */
+.event {
+  background-color: #008cff;
+  color: rgb(255, 255, 255);
+  border-radius: 4px;
+  padding: 5px;
+  font-size: 30px;
+  text-align: center;
+  margin-top: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-today {
+  background-color: #008cff;
+  color: rgb(255, 187, 0);
+}
+
+.empty {
+  background-color: #f9f9f9;
+}
+
+.today {
+  text-align: center;
+  border: 1px solid #d1cece;
+  min-height: 150px;
+  width: 200px;
+  padding: 5px;
+  font: bold;
+  font-size: 45px;
+  color: rgb(255, 115, 0);
+  background-color: #eee;
+}
+
+.event {
+  font-size: 22px;
+  padding: 2px;
+  margin-top: 2px;
+  border-radius: 3px;
+  color: white;
+}
+
+.demanda {
+  background: #343a40;
+  color: white;
+  border-radius: 15px;
+  background: linear-gradient(15deg, #280050 0%, #024d79 100%);
+
+}
+
+.demanda-verde {
+  background: #27AE60;
+  color: white;
+  font-weight: bold;
+  border-radius: 15px;
+}
+
+.projecao {
+  background: #0076bd;
+  border-radius: 15px;
+}
+
+.maior-demanda {
+  border: 3px solid #8102a7;
+  transform: scale(1.05);
+}
+
+.maior-demanda-mes {
+
+  border-radius: 15px;
+  background-color: #012e07;
+  background: linear-gradient(15deg, #280050 0%, #012e07 100%);
+  color: #ffffff;
+
+
+}
+
+.maior-demanda-anterior {
+  border: 3px solid #FFD700;
+  background: #ececec;
+  border-radius: 15px;
+}
