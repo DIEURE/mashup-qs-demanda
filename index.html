@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="adminlte2.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="all.min.css">
-    <link rel="stylesheet" href="calendarStyle.css">
+    
 
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -107,6 +107,11 @@
         })
 
     </script>
+   <!--  <script>
+        window.onload = function () {
+            window.open('calendario.html', '_blank');
+        };
+    </script> -->
 
 
 
@@ -114,9 +119,7 @@
 
 <body class="sidebar-mini layout-fixed sidebar-collapse ">
 
-    <!--     <div id="CurrentSelections" class="qvobjects" style="position:relative; top:0; left:0; width:100%; height:38px;">
-
-    </div> -->
+    <!--<div id="CurrentSelections" class="qvobjects" style="position:relative; top:0; left:0; width:100%; height:38px;"></div> -->
 
     <div class="wrapper">
 
@@ -204,13 +207,14 @@
                                         <p id="Menu01">Demanda</p>
                                     </a>
                                 </li>
-                                <!--  <li class="nav-item">
-                                    <a href="#P02" class="nav-link">
+                                
+                                  <li class="nav-item">
+                                    <a href="calendario.html" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p id="Menu02">Produtos</p>
+                                        <p id="Menu02">Calendário</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <!--<li class="nav-item">
                                     <a href="#P03" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p id="Menu03">SMB</p>
@@ -286,7 +290,7 @@
                                 <!-- ./col -->
                                 <div class="col-lg-3 col-6">
                                     <!-- small box -->
-                                    <div class="small-box bg-info">
+                                    <div class="small-box demandaoeste">
                                         <div id="KPI03_ARCO_OESTE_T1" class="small-box previsao">-</div>
                                         <div class="inner">
                                             <h3 id="KPI03_ARCO_OESTE_DM" class="kpi_1 col-12">-</h3>
@@ -296,9 +300,9 @@
                                             <div id="KPI03_ARCO_OESTE_PJ1" class="col-sm-6 previsao">--</div>
                                         </div>
 
-                                        <!--     <div class="icon">
-                      <i class="fa-solid fa-chart-pie"></i>
-                    </div> -->
+                                        <!--<div class="icon">
+                                            <i class="fa-solid fa-chart-pie"></i>
+                                        </div> -->
 
                                     </div>
                                 </div>
@@ -307,18 +311,18 @@
 
                                 <!-- P A I N E L - S M B -->
 
-                                <div class="col-lg-3 col-6">
-                                    <!-- small box -->
+<!--                                 <div class="col-lg-3 col-6">
+                                      small box  
                                     <div class="small-box bg-success">
                                         <div id="KPI04_SMB_T1" class="small-box previsao">-</div>
                                         <div class="row">
 
-                                            <!-- DADOS DA DEMANDA (Principal) -->
+                                             
                                             <div class="inner col-md-6 kpi_1 col-12">
                                                 <h3 id="KPI04_SMB_DM" class="bg-success">-</h3>
                                             </div>
 
-                                            <!-- DIVISAO SMB NS-LO (Subdividida) KPI04_SMB_NS_T1-->
+                                             
                                             <div class="col">
                                                 <div class="row">
                                                     <div class="row col-12">
@@ -348,6 +352,24 @@
                                         </div>
                                     </div>
 
+                                </div> -->
+                                <div class="col-lg-3 col-6">
+                                    <!-- small box -->
+                                    <div class="small-box bg-success">
+                                        <div id="" class="small-box previsao">SMB-[NORTE/SUL]</div>
+                                        <div class="inner">
+                                            <h3  id="KPI04_SMB_NS_DM"  class="kpi_1 col-12">-</h3>
+                                        </div>
+                                        <div class="inner row ">
+                                            <div id="KPI04_SMB_NS_T2" class="col-sm-6 previsao">T1</div>
+                                            <div id="KPI04_SMB_NS_PJ1" class="col-sm-6 previsao">T2</div>
+                                        </div>
+
+                                        <!--<div class="icon">
+                                            <i class="fa-solid fa-chart-pie"></i>
+                                        </div> -->
+
+                                    </div>
                                 </div>
 
                                 <div class="col-lg-3 col-6">
@@ -370,7 +392,7 @@
                                 <!-- ./col -->
                                 <div class="col-lg-3 col-6">
                                     <!-- small box -->
-                                    <div class="small-box bg-primary">
+                                    <div class="small-box demandamensal">
                                         <div id="KPI07_ABS_T1" class="small-box previsao">-</div>
                                         <div class="inner">
                                             <h3 id="KPI07_ABS_DM" class="kpi_1 col-12">-</h3>
@@ -405,18 +427,18 @@
                                 <!-- ./col -->
                                 <div class="col-lg-3 col-6">
                                     <!-- small box -->
-                                    <div class="small-box bg-secondary ">
-                                        <div id="" class="small-box previsao">Quilometragem</div>
-                                        <div class="inner">
-                                            <h3 id="" class="kpi_1 col-12">000.000</h3>
+                                    <div class="small-box bg-success ">
+                                          <div id="" class="small-box previsao">SMB-[LESTE/OESTE]</div>  
+                                         <div class="inner">
+                                            <h3 id="KPI05_SMB_LO_DM" class="kpi_1 col-12">111.456</h3>
                                         </div>
                                         <div class="inner row ">
-                                            <div id="" class="col-sm-6 previsao">Ociosa</div>
-                                            <div id="" class="col-sm-6 previsao">000.000</div>
-                                        </div>
-                                        <div class="icon">
+                                            <div id="KPI05_SMB_LO_T2" class="col-sm-6 previsao">Ociosa</div>
+                                            <div id="KPI05_SMB_LO_PJ1" class="col-sm-6 previsao">000.000</div>
+                                        </div> 
+                                       <!--  <div class="icon">
                                             <i class="fas fa-tachometer-alt"></i>
-                                        </div>
+                                        </div>  -->
 
                                     </div>
                                 </div>
@@ -571,9 +593,9 @@
 
                                     <div class="card card-primary">
                                         <div class="card-header border-0">
-                                            <h3 class="card-title small " id="titulo1Menos">TOP 10- [RMTC]</h3>
+                                            <h3 class="card-title small " id="titulo1Menos">TOP 10+</h3>
                                             <div class="card-tools">
-                                                <a href="#" class="btn btn-tool btn-sm" id="titulo1Menos">
+                                                <a href="#" class="btn btn-tool btn-sm" id="titulo1">
                                                     <i class="fas fa-download"></i>
                                                 </a>
 
@@ -597,16 +619,17 @@
                                             <div class="d-flex justify-content-between mt-2">
 
                                                 <button type="button" class="btn btn-outline-primary btn-sm"
-                                                    onclick="paginaAnteriorMenos()">
+                                                    onclick="paginaAnterior()">
                                                     <i class="fas fa-chevron-left"></i> Anterior
                                                 </button>
 
                                                 <button type="button" class="btn btn-outline-primary btn-sm"
-                                                    onclick="proximaPaginaMenos()">
+                                                    onclick="proximaPagina()">
                                                     Próximo <i class="fas fa-chevron-right"></i>
                                                 </button>
 
                                             </div>
+
                                         </div>
                                     </div>
                                     <!-- <div class="card card-primary">
@@ -641,43 +664,18 @@
 
                                     <!-- /.col-md-6 -->
                                 </div>
-
-                                <!-- /.row -->
-
-                                <!-- /.container-fluid -->
-
-                                <!-- /.content -->
                             </div>
                     </section>
 
 
-                    <section class="#P02">
-                        <div class="calendar-container">
-                            <div class="calendar-header">
-                                <button id="prevMonth" class="btn btn-primary" aria-label="Previous">
-                                    <i class="fa-solid fa-arrow-left"></i></button>
-                                <h2 id="monthYear"></h2>
-                                <button id="nextMonth" class="btn btn-primary" aria-label="Previous">
-                                    <i class="fa-solid fa-arrow-right"></i></button>
-                            </div>
-                            <div class="calendar-days-name">
-                                <div>Dom</div>
-                                <div>Seg</div>
-                                <div>Ter</div>
-                                <div>Qua</div>
-                                <div>Qui</div>
-                                <div>Sex</div>
-                                <div>Sáb</div>
-                            </div>
-                            <div class="calendar-days" id="calendarDays">
+                    <section>
 
-                            </div>
-                        </div>
                     </section>
 
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- /.control-sidebar -->

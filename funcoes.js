@@ -270,7 +270,7 @@ function graficoDemandaTop(dadosTopRmtc) {
 		}
 
 		html += `
-		<tr style="font-size:12px">
+		<tr style="font-size:10px">
 			<td>${linha}</td>
 			<td>${parseValor(demandaAtualText)}</td>
 			<td>${parseValor(demandaAnteriorText)}</td>
@@ -336,7 +336,7 @@ function graficoDemandaTopMenos(dadosTopRmtcMenos) {
 		}
 
 		html += `
-		<tr style="font-size:12px">
+		<tr style="font-size:10px">
 			<td>${linha}</td>
 			<td>${parseValor(demandaAtualMenosText)}</td>
 			<td>${parseValor(demandaAnteriorMenosText)}</td>

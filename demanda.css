@@ -43,6 +43,15 @@
 	top: 58px;
 }
 
+.demandamensal{
+	background: linear-gradient(90deg,rgba(0, 58, 97, 1) 0%, rgba(4, 86, 194, 1) 50%, rgba(61, 34, 133, 1) 100%);
+	color: #fff;
+}
+.demandaoeste{
+	background: linear-gradient(90deg,rgba(0, 58, 97, 1) 0%, rgb(3, 104, 187) 50%, rgb(1, 60, 78) 100%);
+	color: #DDD;
+}
+
 /*
 .menu-hidde li {
 color: black;
