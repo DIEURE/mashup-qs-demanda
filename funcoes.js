@@ -1,4 +1,40 @@
 
+/* function exibirDataCompleta() {
+
+	let valor = document.getElementById("dataSelecionada").value;
+	let data;
+
+	if (!valor) {
+		data = new Date();
+	} else {
+		data = new Date(valor);
+	}
+
+	data.setDate(data.getDate());
+
+	const diasSemana = [
+		"Domingo", "Segunda-feira", "Terça-feira",
+		"Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"
+	];
+
+	// 4. Formatar a data (dd/mm/aaaa)
+	let dia = String(data.getDate()).padStart(2, '0');
+	let mes = String(data.getMonth() + 1).padStart(2, '0'); // Janeiro é 0
+	let ano = data.getFullYear();
+
+	// 5. Pegar o nome do dia da semana
+	let diaSemanaNome = diasSemana[data.getDay()];
+
+	// 6. Montar a string final
+	let dataFormatada = `${diaSemanaNome}, ${dia}/${mes}/${ano}`;
+
+	// 7. Colocar no HTML usando document.getElementById
+	document.getElementById("data").innerText = dataFormatada;
+	document.getElementById("dataSelecionada")
+		.addEventListener("change", mostrarDataSelecionada);
+} */
+ 
+
 function baseDemandaDiaria(dadosBaseDem) {
 
 	//console.log("dados base calendar" + dadosBaseDem);
@@ -352,4 +388,6 @@ function graficoDemandaTopMenos(dadosTopRmtcMenos) {
 		$(window).trigger('resize');
 	}, 100);
 }
+
+
 /********************************************************************F I M *****************************************************************/

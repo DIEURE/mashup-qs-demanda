@@ -26,7 +26,9 @@ require(["js/qlik"], function (qlik) {
 		$('#popup').hide();
 	});
 
-
+	$(document).on("change", "#dataSelecionada", function () {
+		exibirDataCompleta();
+	});
 
 	//callbacks -- inserted here --
 	//open apps -- inserted here --
@@ -34,6 +36,7 @@ require(["js/qlik"], function (qlik) {
 
 	//get objects -- inserted here --
 	app.getObject('CurrentSelections', 'CurrentSelections');
+
 
 	/* function graf_externos() { */
 
@@ -219,7 +222,7 @@ require(["js/qlik"], function (qlik) {
 			qHeight: linhasPorPagina
 		}];
 
-		console.log("Buscando página:", paginaAtual);
+		//console.log("Buscando página:", paginaAtual);
 
 		modelTabela
 			.getHyperCubeData("/qHyperCubeDef", requestPage)
@@ -260,9 +263,9 @@ require(["js/qlik"], function (qlik) {
 		}
 	};
 
-/*************************pagina top10 menos */
+	/*************************pagina top10 menos */
 
-let paginaAtualMenos = 0;
+	let paginaAtualMenos = 0;
 	const linhasPorPaginaMenos = 10;
 
 	let modelTabelaMenos = null;
@@ -271,7 +274,7 @@ let paginaAtualMenos = 0;
 
 	app.getObject("wsjjwDY").then(function (dadosTopRmtcMenos) {
 
-		console.log("MODEL OK:", dadosTopRmtcMenos);
+		//console.log("MODEL OK:", dadosTopRmtcMenos);
 
 		modelTabelaMenos = dadosTopRmtcMenos;
 
@@ -299,7 +302,7 @@ let paginaAtualMenos = 0;
 			qHeight: linhasPorPaginaMenos
 		}];
 
-		console.log("Buscando página:", paginaAtualMenos);
+		//console.log("Buscando página:", paginaAtualMenos);
 
 		modelTabelaMenos
 			.getHyperCubeData("/qHyperCubeDef", requestPage)
@@ -340,12 +343,12 @@ let paginaAtualMenos = 0;
 		}
 	};
 
-/****************************************************/
+	/****************************************************/
 
 
 	//TOP20 MAIS RMTC
 	app.getObject("JrGMEM").then(function (dadosTopRmtc) {
-		console.log(dadosTopRmtc);
+		//	console.log(dadosTopRmtc);
 		dadosTopRmtc.getLayout().then(function (layout) {
 			graficoDemandaTop({
 				layout: layout
@@ -480,10 +483,148 @@ let paginaAtualMenos = 0;
 		return partes[2] + "/" + partes[1] + "/" + partes[0];
 	}
 
+	/* $("#botaoLimpar").click(function () {
+
+		app.clearAll();
+
+		// 🔥 Pega data atual
+		let hoje = new Date();
+
+		// 🔥 D-1
+		hoje.setDate(hoje.getDate() - 1);
+
+		// formato yyyy-mm-dd (input)
+		let ano = hoje.getFullYear();
+		let mes = String(hoje.getMonth() + 1).padStart(2, '0');
+		let dia = String(hoje.getDate()).padStart(2, '0');
+
+		let dataISO = `${ano}-${mes}-${dia}`;
+
+		// seta no input
+		$("#dataSelecionada").val(dataISO);
+
+		// 🔥 Formata para Qlik (dd/mm/yyyy)
+		let dataQlik = formatarDataQlik(dataISO);
+
+		// 🔥 D-8 (baseado no D-1)
+		let dataMenos8 = subtrairDias(dataISO, 7);
+		let dataQlikMenos8 = formatarDataQlik(dataMenos8);
+
+		// 🔥 Atualiza variáveis
+		app.variable.setStringValue("vDataSelecionada", dataQlik);
+		app.variable.setStringValue("vDataFormatada8", dataQlikMenos8);
+		app.variable.setStringValue("vDataFormatada1", dataQlik);
+
+		// 🔥 Aplica seleção no campo
+		app.field("DTSERVICO").selectMatch(dataQlik);
+
+		// 🔥 Atualiza texto formatado na tela
+		exibirDataCompleta();
+
+		// Tooltip
+		var tooltip = $('#filter-tooltip');
+		tooltip.fadeIn(400).delay(1500).fadeOut(400);
+
+	}); */
+
+	let atualizandoViaQlik = false;
+	function getDmenos1ISO() {
+
+	let hoje = new Date();
+	hoje.setDate(hoje.getDate() - 1);
+
+	let ano = hoje.getFullYear();
+	let mes = String(hoje.getMonth() + 1).padStart(2, '0');
+	let dia = String(hoje.getDate()).padStart(2, '0');
+
+	return `${ano}-${mes}-${dia}`;
+}
+
+$(document).on("change", "#dataSelecionada", function () {
+
+	if (atualizandoViaQlik) return;
+
+	let dataISO = $(this).val();
+	if (!dataISO) return;
+
+	let dataQlik = formatarDataQlik(dataISO);
+
+	app.field("DTSERVICO").selectMatch(dataQlik);
+
+	let dataMenos8 = subtrairDias(dataISO, 7);
+	let dataQlikMenos8 = formatarDataQlik(dataMenos8);
+
+	app.variable.setStringValue("vDataSelecionada", dataQlik);
+	app.variable.setStringValue("vDataFormatada8", dataQlikMenos8);
+	app.variable.setStringValue("vDataFormatada1", dataQlik);
+
+	//exibirDataCompleta();
+
+});
+ 
+app.getList("CurrentSelections", function (reply) {
+
+	let selecoes = reply.qSelectionObject.qSelections;
+	let temData = false;
+
+	selecoes.forEach(function (sel) {
+
+		if (sel.qField === "DTSERVICO") {
+
+			temData = true;
+
+			let dataQlik = sel.qSelected;
+			if (!dataQlik) return;
+
+			let partes = dataQlik.split("/");
+			let dataISO = `${partes[2]}-${partes[1]}-${partes[0]}`;
+
+			atualizandoViaQlik = true;
+
+			$("#dataSelecionada").val(dataISO);
+
+			setTimeout(() => {
+				atualizandoViaQlik = false;
+			}, 100);
+
+			//exibirDataCompleta();
+		}
+
+	});
+
+	// 🔥 SE NÃO TEM DATA → aplica D-1 automaticamente
+ 	if (!temData) {
+
+		let dataISO = getDmenos1ISO();
+		let dataQlik = formatarDataQlik(dataISO);
+
+		atualizandoViaQlik = true;
+
+		$("#dataSelecionada").val(dataISO);
+
+		setTimeout(() => {
+			atualizandoViaQlik = false;
+		}, 100);
+
+		// aplica no Qlik
+		app.field("DTSERVICO").selectMatch(dataQlik);
+
+		// variáveis
+		let dataMenos8 = subtrairDias(dataISO, 7);
+		let dataQlikMenos8 = formatarDataQlik(dataMenos8);
+
+		app.variable.setStringValue("vDataSelecionada", dataQlik);
+		app.variable.setStringValue("vDataFormatada8", dataQlikMenos8);
+		app.variable.setStringValue("vDataFormatada1", dataQlik);
+
+		//exibirDataCompleta();
+	}  
+
+});
 
 	// fim dos codigo data selecionada
 	app.getList("CurrentSelections", function (reply) {
 		//console.log(reply.qSelectionObject.qSelections);
-	}); 
+	});
 
 });

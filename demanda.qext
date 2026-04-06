@@ -1,11 +1,12 @@
 {
 	"type": "mashup",
 	"name": "demanda",
-	"description": "Basic responsive mashup template",
+	"description": "Soluções de Transporte",
 	"version": "1.0.0",
-	"author": "",
-	"homepage": "",
+	"author": "Dieure Oliveira",
+	"homepage": "https://qlik.redemobconsorcio.com.br/extensions/demanda/index.html",
 	"keywords": "qlik-sense, visualization, mashup",
+	"preview":"logo.png",
 	"license": "",
 	"repository": "",
 	"dependencies": {
