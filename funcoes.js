@@ -389,7 +389,6 @@ function graficoDemandaTopMenos(dadosTopRmtcMenos) {
 	}, 100);
 }
 
-
 function formatarDataQlikTexto(dataMax) {
 
 	let partes = dataMax.split("/");

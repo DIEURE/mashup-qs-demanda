@@ -426,7 +426,6 @@ require(["js/qlik"], function (qlik) {
 	app.getObject("KXRmDsa").then(function (obj) {
 		let dataMax = obj.layout.qHyperCube.qDataPages[0].qMatrix[0][0].qText;
 
-
 		if (!dataMax) return;
 		let texto = formatarDataQlikTexto(dataMax);
 
