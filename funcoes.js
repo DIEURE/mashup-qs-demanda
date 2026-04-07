@@ -390,4 +390,23 @@ function graficoDemandaTopMenos(dadosTopRmtcMenos) {
 }
 
 
+function formatarDataQlikTexto(dataMax) {
+
+	let partes = dataMax.split("/");
+	let data = new Date(partes[2], partes[1] - 1, partes[0]);
+
+	const diasSemana = [
+		"Domingo", "Segunda-feira", "Terça-feira",
+		"Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"
+	];
+
+	let dia = String(data.getDate()).padStart(2, '0');
+	let mes = String(data.getMonth() + 1).padStart(2, '0');
+	let ano = data.getFullYear();
+
+	let diaSemana = diasSemana[data.getDay()];
+
+	return `${diaSemana}, ${dia}/${mes}/${ano}`;
+}
+
 /********************************************************************F I M *****************************************************************/

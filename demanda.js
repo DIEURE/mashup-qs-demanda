@@ -26,13 +26,17 @@ require(["js/qlik"], function (qlik) {
 		$('#popup').hide();
 	});
 
-	$(document).on("change", "#dataSelecionada", function () {
-		exibirDataCompleta();
-	});
 
 	//callbacks -- inserted here --
 	//open apps -- inserted here --
 	var app = qlik.openApp('2b721db1-ca23-4fbb-a516-b3eb5affa688', config);
+
+
+	let bloqueiaDmenos1 = false;
+	let campoData = app.field("DTSERVICO");
+	let inicializado = false;
+	let limpouFiltro = false;
+	let atualizandoViaQlik = false;
 
 	//get objects -- inserted here --
 	app.getObject('CurrentSelections', 'CurrentSelections');
@@ -194,7 +198,7 @@ require(["js/qlik"], function (qlik) {
 
 	app.getObject("JrGMEM").then(function (model) {
 
-		console.log("MODEL OK:", model);
+		//console.log("MODEL OK:", model);
 
 		modelTabela = model;
 
@@ -419,6 +423,28 @@ require(["js/qlik"], function (qlik) {
 		});
 	});
 
+	app.getObject("KXRmDsa").then(function (obj) {
+		let dataMax = obj.layout.qHyperCube.qDataPages[0].qMatrix[0][0].qText;
+
+
+		if (!dataMax) return;
+		let texto = formatarDataQlikTexto(dataMax);
+
+		// 🔥 Divide dd/mm/aaaa
+		let partes = dataMax.split('/');
+
+		let dia = partes[0];
+		let mes = partes[1];
+		let ano = partes[2];
+
+		// 🔥 Converte para formato ISO
+		let dataISOs = `${ano}-${mes}-${dia}`;
+
+		document.getElementById("dataSelecionada").value = dataISOs;
+
+		document.getElementById("dataAtual").innerText = texto;
+	})
+
 
 	/* graf_externos();
 		*/
@@ -427,204 +453,124 @@ require(["js/qlik"], function (qlik) {
 		qDef: { qFieldDefs: ["DTSERVICO"] },
 		qInitialDataFetch: [{ qTop: 0, qHeight: 10, qWidth: 1 }]
 	}, function (reply) {
-
 	});
 
 
-	$(document).ready(function () {
+	// ================= CONTROLE DE DATA =================
+	// 🔥 BOTÃO LIMPAR
+	$("#botaoLimpar").click(function () {
+		limpouFiltro = true;
+		app.clearAll();
+	});
 
-		$(document).on("click", "#btnEnviar", function () {
+	// 🔥 FUNÇÕES
+	function getDmenos1ISO() {
+		let hoje = new Date();
+		hoje.setDate(hoje.getDate() - 1);
 
-			var dataHTML = $("#dataSelecionada").val();
+		let ano = hoje.getFullYear();
+		let mes = String(hoje.getMonth() + 1).padStart(2, '0');
+		let dia = String(hoje.getDate()).padStart(2, '0');
 
-			//console.log("Data HTML:", dataHTML);
+		return `${ano}-${mes}-${dia}`;
+	}
 
-			// data no formato Qlik (ex: 25/02/2026)
-			var dataQlik = formatarDataQlik(dataHTML);
+	function formatarDataQlik(dataISO) {
+		let partes = dataISO.split("-");
+		return `${partes[2]}/${partes[1]}/${partes[0]}`;
+	}
 
-			//console.log("Data Qlik:", dataQlik);
+	function subtrairDias(dataString, dias) {
+		let data = new Date(dataString);
+		data.setDate(data.getDate() - dias);
+		return data.toISOString().split('T')[0];
+	}
 
-			// ===== CALCULAR -8 DIAS =====
-			var dataMenos8 = subtrairDias(dataHTML, 7);
-			var dataQlikMenos8 = formatarDataQlik(dataMenos8);
+	$(document).on("change", "#dataSelecionada", function () {
 
-			//console.log("Data -8 dias:", dataQlikMenos8);
+		if (atualizandoViaQlik) return;
 
-			// envia para variáveis
-			app.variable.setStringValue("vDataSelecionada", dataQlik);
-			app.variable.setStringValue("vDataFormatada8", dataQlikMenos8);
-			app.variable.setStringValue("vDataFormatada1", dataQlik);
+		let dataISO = $(this).val();
+		if (!dataISO) return;
 
-			// aplica seleção
-			app.field("DTSERVICO").selectMatch(dataQlik);
+		let dataQlik = formatarDataQlik(dataISO);
+
+		campoData.selectMatch(dataQlik);
+
+		let dataMenos8 = subtrairDias(dataISO, 7);
+		let dataQlikMenos8 = formatarDataQlik(dataMenos8);
+
+		app.variable.setStringValue("vDataSelecionada", dataQlik);
+		app.variable.setStringValue("vDataFormatada8", dataQlikMenos8);
+		app.variable.setStringValue("vDataFormatada1", dataQlik);
+	});
+
+	app.getList("CurrentSelections", function (reply) {
+
+		let selecoes = reply.qSelectionObject.qSelections;
+
+		selecoes.forEach(function (sel) {
+
+			if (sel.qField === "DTSERVICO") {
+
+				let dataQlik = sel.qSelected;
+
+				console.log(dataQlik);
+
+				if (!dataQlik) return;
+
+				// 🔥 converte dd/mm/yyyy → yyyy-MM-dd
+				let partes = dataQlik.split("/");
+				let dataISO = `${partes[2]}-${partes[1]}-${partes[0]}`;
+
+				// 🔥 atualiza o input
+				document.getElementById("dataSelecionada").value = dataISO;
+				console.log("Valor input:", document.getElementById("dataSelecionada").value);
+				$(document).ready(function () {
+
+					setTimeout(() => {
+						mostrarDataSelecionada();
+					}, 300);
+
+				});
+
+			}
 
 		});
 
 	});
 
 
-	// função para subtrair dias
-	function subtrairDias(dataString, dias) {
 
-		// dataHTML vem como yyyy-mm-dd
-		var data = new Date(dataString);
+	function mostrarDataSelecionada() {
 
-		data.setDate(data.getDate() - dias);
+		let valor = document.getElementById("dataSelecionada").value;
 
-		// retorna novamente yyyy-mm-dd
-		return data.toISOString().split('T')[0];
-	}
-
-
-	function formatarDataQlik(dataISO) {
-
-		var partes = dataISO.split("-");
-
-		return partes[2] + "/" + partes[1] + "/" + partes[0];
-	}
-
-	/* $("#botaoLimpar").click(function () {
-
-		app.clearAll();
-
-		// 🔥 Pega data atual
-		let hoje = new Date();
-
-		// 🔥 D-1
-		hoje.setDate(hoje.getDate() - 1);
-
-		// formato yyyy-mm-dd (input)
-		let ano = hoje.getFullYear();
-		let mes = String(hoje.getMonth() + 1).padStart(2, '0');
-		let dia = String(hoje.getDate()).padStart(2, '0');
-
-		let dataISO = `${ano}-${mes}-${dia}`;
-
-		// seta no input
-		$("#dataSelecionada").val(dataISO);
-
-		// 🔥 Formata para Qlik (dd/mm/yyyy)
-		let dataQlik = formatarDataQlik(dataISO);
-
-		// 🔥 D-8 (baseado no D-1)
-		let dataMenos8 = subtrairDias(dataISO, 7);
-		let dataQlikMenos8 = formatarDataQlik(dataMenos8);
-
-		// 🔥 Atualiza variáveis
-		app.variable.setStringValue("vDataSelecionada", dataQlik);
-		app.variable.setStringValue("vDataFormatada8", dataQlikMenos8);
-		app.variable.setStringValue("vDataFormatada1", dataQlik);
-
-		// 🔥 Aplica seleção no campo
-		app.field("DTSERVICO").selectMatch(dataQlik);
-
-		// 🔥 Atualiza texto formatado na tela
-		exibirDataCompleta();
-
-		// Tooltip
-		var tooltip = $('#filter-tooltip');
-		tooltip.fadeIn(400).delay(1500).fadeOut(400);
-
-	}); */
-
-	let atualizandoViaQlik = false;
-	function getDmenos1ISO() {
-
-	let hoje = new Date();
-	hoje.setDate(hoje.getDate() - 1);
-
-	let ano = hoje.getFullYear();
-	let mes = String(hoje.getMonth() + 1).padStart(2, '0');
-	let dia = String(hoje.getDate()).padStart(2, '0');
-
-	return `${ano}-${mes}-${dia}`;
-}
-
-$(document).on("change", "#dataSelecionada", function () {
-
-	if (atualizandoViaQlik) return;
-
-	let dataISO = $(this).val();
-	if (!dataISO) return;
-
-	let dataQlik = formatarDataQlik(dataISO);
-
-	app.field("DTSERVICO").selectMatch(dataQlik);
-
-	let dataMenos8 = subtrairDias(dataISO, 7);
-	let dataQlikMenos8 = formatarDataQlik(dataMenos8);
-
-	app.variable.setStringValue("vDataSelecionada", dataQlik);
-	app.variable.setStringValue("vDataFormatada8", dataQlikMenos8);
-	app.variable.setStringValue("vDataFormatada1", dataQlik);
-
-	//exibirDataCompleta();
-
-});
- 
-app.getList("CurrentSelections", function (reply) {
-
-	let selecoes = reply.qSelectionObject.qSelections;
-	let temData = false;
-
-	selecoes.forEach(function (sel) {
-
-		if (sel.qField === "DTSERVICO") {
-
-			temData = true;
-
-			let dataQlik = sel.qSelected;
-			if (!dataQlik) return;
-
-			let partes = dataQlik.split("/");
-			let dataISO = `${partes[2]}-${partes[1]}-${partes[0]}`;
-
-			atualizandoViaQlik = true;
-
-			$("#dataSelecionada").val(dataISO);
-
-			setTimeout(() => {
-				atualizandoViaQlik = false;
-			}, 100);
-
-			//exibirDataCompleta();
+		if (!valor) {
+			document.getElementById("data").innerText = "";
+			return;
 		}
 
-	});
+		// yyyy-MM-dd → Date
+		let partes = valor.split("-");
+		let data = new Date(partes[0], partes[1] - 1, partes[2]);
 
-	// 🔥 SE NÃO TEM DATA → aplica D-1 automaticamente
- 	if (!temData) {
+		const diasSemana = [
+			"Domingo", "Segunda-feira", "Terça-feira",
+			"Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"
+		];
 
-		let dataISO = getDmenos1ISO();
-		let dataQlik = formatarDataQlik(dataISO);
+		let dia = String(data.getDate()).padStart(2, '0');
+		let mes = String(data.getMonth() + 1).padStart(2, '0');
+		let ano = data.getFullYear();
 
-		atualizandoViaQlik = true;
+		let diaSemana = diasSemana[data.getDay()];
 
-		$("#dataSelecionada").val(dataISO);
+		let dataFormatada = `${diaSemana}, ${dia}/${mes}/${ano}`;
 
-		setTimeout(() => {
-			atualizandoViaQlik = false;
-		}, 100);
+		document.getElementById("data").innerText = dataFormatada;
 
-		// aplica no Qlik
-		app.field("DTSERVICO").selectMatch(dataQlik);
+	}
 
-		// variáveis
-		let dataMenos8 = subtrairDias(dataISO, 7);
-		let dataQlikMenos8 = formatarDataQlik(dataMenos8);
-
-		app.variable.setStringValue("vDataSelecionada", dataQlik);
-		app.variable.setStringValue("vDataFormatada8", dataQlikMenos8);
-		app.variable.setStringValue("vDataFormatada1", dataQlik);
-
-		//exibirDataCompleta();
-	}  
-
-});
-
-	// fim dos codigo data selecionada
-	app.getList("CurrentSelections", function (reply) {
-		//console.log(reply.qSelectionObject.qSelections);
-	});
 
 });
