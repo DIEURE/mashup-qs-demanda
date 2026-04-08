@@ -321,3 +321,31 @@ div.qv-global-selections.ng-scope.ng-isolate-scope {
 		display: flex;
 	}
 }
+
+.custom-select {
+  position: relative;
+  display: inline-block;
+}
+
+  
+select {
+   
+  color: #ccc; 
+  background-color: rgb(87, 87, 87);
+  cursor: pointer; 
+   
+}
+
+/* Estilo para quando o select estiver focado */
+select:focus {
+  outline: none;
+   
+  box-shadow: 0 0 5px rgba(126, 3, 60, 0.5);
+}
+
+/* Estilo para as opções */
+option {
+  padding: 10px;
+  font-size: x-small;
+  
+}

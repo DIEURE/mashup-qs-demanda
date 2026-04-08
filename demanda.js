@@ -26,7 +26,6 @@ require(["js/qlik"], function (qlik) {
 		$('#popup').hide();
 	});
 
-
 	//callbacks -- inserted here --
 	//open apps -- inserted here --
 	var app = qlik.openApp('2b721db1-ca23-4fbb-a516-b3eb5affa688', config);
@@ -41,8 +40,7 @@ require(["js/qlik"], function (qlik) {
 	//get objects -- inserted here --
 	app.getObject('CurrentSelections', 'CurrentSelections');
 
-
-	/* function graf_externos() { */
+	// function graf_externos() {  
 
 	//Pegar a data d-1 do relatorio
 	app.getObject('b0d3bcea-8f4b-48e5-9c1b-396ca28701a4').then(function (dadosdata) {
@@ -442,11 +440,98 @@ require(["js/qlik"], function (qlik) {
 		document.getElementById("dataSelecionada").value = dataISOs;
 
 		document.getElementById("dataAtual").innerText = texto;
-	})
+	});
+
+	//Carregando a tabela de linhas do qlik
+	/* app.getObject("NufxYq").then(function (objLinha) {
+		let matrix_linha = objLinha.layout.qHyperCube.qDataPages[0].qMatrix;
+		
+		for(let c=0; c < matrix_linha.length; c++){
+			const linha = matrix_linha[c][0].qText;
+			console.log(linha);
+		}
+	}); */
+
+	function esperarElemento(id, callback) {
+		const el = document.getElementById(id);
+
+		if (el) {
+			callback(el);
+		} else {
+			setTimeout(() => esperarElemento(id, callback), 300);
+		}
+	}
+
+	esperarElemento("lista-linhas", function (select) {
+
+		console.log("✅ Select encontrado:", select);
+
+		select.innerHTML = '<option value="">Carregando...</option>';
+
+		app.createList({
+			qDef: {
+				qFieldDefs: ["LINHA"]
+			},
+			qInitialDataFetch: [{
+				qTop: 0,
+				qLeft: 0,
+				qWidth: 1,
+				qHeight: 1000
+			}]
+		}, function (reply) {
+
+			console.log("📥 Dados chegaram");
+
+			const matrix = reply.qListObject.qDataPages[0].qMatrix;
+
+			select.innerHTML = '<option value="">Selecione uma linha...</option>';
+
+			matrix.forEach(row => {
+				const valor = row[0].qText;
+
+				const option = document.createElement("option");
+				option.value = valor;
+				option.text = valor;
+
+				select.appendChild(option);
+			});
+		});
+	});
 
 
-	/* graf_externos();
-		*/
+	const select = document.getElementById("lista-linhas");
+
+select.addEventListener("change", function () {
+
+    const linha = this.value;
+
+    const app = qlik.currApp();
+
+    // 🔥 pega a data atual do input (já controlado no seu código)
+    const dataISO = document.getElementById("dataSelecionada").value;
+
+    let dataQlik = null;
+
+    if (dataISO) {
+        let partes = dataISO.split("-");
+        dataQlik = `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+
+    // 🔄 limpa se não tiver nada
+    if (!linha) {
+        app.field("LINHA").clear();
+        return;
+    }
+
+    // 🔥 APLICA OS DOIS FILTROS
+    app.field("LINHA").selectMatch(linha, false);
+
+    if (dataQlik) {
+        app.field("DTSERVICO").selectMatch(dataQlik, false);
+    }
+
+});
+
 	//create cube and lists
 	app.createList({
 		qDef: { qFieldDefs: ["DTSERVICO"] },
@@ -458,8 +543,53 @@ require(["js/qlik"], function (qlik) {
 	// ================= CONTROLE DE DATA =================
 	// 🔥 BOTÃO LIMPAR
 	$("#botaoLimpar").click(function () {
+
 		limpouFiltro = true;
-		app.clearAll();
+
+		// 1. Limpa seleções
+		app.clearAll().then(function () {
+
+			// 2. Busca a última data do Qlik
+			app.getObject("KXRmDsa").then(function (obj) {
+
+				let dataMax = obj.layout.qHyperCube.qDataPages[0].qMatrix[0][0].qText;
+
+				if (!dataMax) return;
+
+				// 3. Seleciona no campo
+				campoData.selectMatch(dataMax);
+
+				// 4. Atualiza input (dd/mm/yyyy → yyyy-MM-dd)
+				let partes = dataMax.split('/');
+				let dataISO = `${partes[2]}-${partes[1]}-${partes[0]}`;
+
+				atualizandoViaQlik = true;
+				document.getElementById("dataSelecionada").value = dataISO;
+				atualizandoViaQlik = false;
+
+				// 5. Atualiza variáveis (se usar)
+				let dataMenos7 = subtrairDias(dataISO, 7);
+				let dataQlikMenos7 = formatarDataQlik(dataMenos7);
+
+				app.variable.setStringValue("vDataSelecionada", dataMax);
+				app.variable.setStringValue("vDataFormatada8", dataQlikMenos7);
+				app.variable.setStringValue("vDataFormatada1", dataMax);
+
+
+				app.getAppLayout().then(function () {
+					app.field("DTSERVICO").clear();
+				});
+
+
+			});
+
+
+
+
+		});
+
+
+
 	});
 
 	// 🔥 FUNÇÕES
@@ -525,13 +655,13 @@ require(["js/qlik"], function (qlik) {
 				// 🔥 atualiza o input
 				document.getElementById("dataSelecionada").value = dataISO;
 				console.log("Valor input:", document.getElementById("dataSelecionada").value);
-				$(document).ready(function () {
+				/* $(document).ready(function () {
 
 					setTimeout(() => {
 						mostrarDataSelecionada();
 					}, 300);
 
-				});
+				}); */
 
 			}
 
